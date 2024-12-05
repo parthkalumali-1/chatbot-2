@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Chatbot</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-box" id="chat-box">
-            <div class="chat-message bot-message">
-                Hello! How can I assist you today?
-            </div>
-        </div>
-        <input type="text" id="user-input" placeholder="Type a command...">
-        <button id="send-btn">Send</button>
+  <div class="chatbot-container">
+    <div id="welcome-message">
+      <h1>Welcome to the Chatbot!</h1>
+      <p>Ask me anything or play games like Tic-Tac-Toe and Rock Paper Scissors.</p>
     </div>
 
-    <script src="script.js"></script>
+    <div id="game-buttons">
+      <button id="tic-tac-toe-btn">Play Tic-Tac-Toe</button>
+      <button id="rock-paper-scissors-btn">Play Rock Paper Scissors</button>
+    </div>
+
+    <div id="chat-container">
+      <!-- Chat interface will go here -->
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
