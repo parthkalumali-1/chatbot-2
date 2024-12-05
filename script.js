@@ -54,7 +54,7 @@ function getJoke() {
 
 function getWeather() {
     // Mock weather response for the sake of the example
-    return "The current weather is 22°C with light showers.";
+    return "The current weather is 26°C with light showers.";
 }
 
 function getCurrentTime() {
