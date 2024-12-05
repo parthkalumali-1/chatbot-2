@@ -53,38 +53,66 @@ function processBotResponse(userInput) {
     addMessageToChat('bot', botResponse);
 }
 
+let ticTacToeBoard;
+let currentPlayer;
+
 function startTicTacToe() {
+    ticTacToeBoard = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+    ];
+    currentPlayer = 'X';
+
     addMessageToChat('bot', "Starting Tic-Tac-Toe! Here's the board:");
-    const ticTacToeHTML = `
-        <div id="tic-tac-toe">
-            <div class="row">
-                <button class="cell" onclick="makeMove(this, 0, 0)"></button>
-                <button class="cell" onclick="makeMove(this, 0, 1)"></button>
-                <button class="cell" onclick="makeMove(this, 0, 2)"></button>
-            </div>
-            <div class="row">
-                <button class="cell" onclick="makeMove(this, 1, 0)"></button>
-                <button class="cell" onclick="makeMove(this, 1, 1)"></button>
-                <button class="cell" onclick="makeMove(this, 1, 2)"></button>
-            </div>
-            <div class="row">
-                <button class="cell" onclick="makeMove(this, 2, 0)"></button>
-                <button class="cell" onclick="makeMove(this, 2, 1)"></button>
-                <button class="cell" onclick="makeMove(this, 2, 2)"></button>
-            </div>
-        </div>`;
-    document.getElementById('chat-box').innerHTML += ticTacToeHTML;
+    const boardHTML = `
+        <div id="tic-tac-toe" style="display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; margin-top: 10px;">
+            ${Array(9).fill().map((_, i) => `
+                <button class="cell" style="width: 100px; height: 100px; font-size: 24px;" 
+                        onclick="makeMove(${Math.floor(i / 3)}, ${i % 3}, this)"></button>
+            `).join('')}
+        </div>
+    `;
+    document.getElementById('chat-box').innerHTML += boardHTML;
 }
 
-function makeMove(cell, row, col) {
-    cell.textContent = 'X'; // For now, only player plays.
-    cell.disabled = true;
-    // Add logic for the bot's turn or game status check.
+function makeMove(row, col, cell) {
+    if (ticTacToeBoard[row][col] === '') {
+        ticTacToeBoard[row][col] = currentPlayer;
+        cell.textContent = currentPlayer;
+
+        if (checkWinner()) {
+            addMessageToChat('bot', `Player ${currentPlayer} wins!`);
+            document.querySelectorAll('.cell').forEach(button => button.disabled = true);
+            return;
+        }
+
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        addMessageToChat('bot', `Player ${currentPlayer}'s turn.`);
+    }
+}
+
+function checkWinner() {
+    const winningCombinations = [
+        [[0, 0], [0, 1], [0, 2]],
+        [[1, 0], [1, 1], [1, 2]],
+        [[2, 0], [2, 1], [2, 2]],
+        [[0, 0], [1, 0], [2, 0]],
+        [[0, 1], [1, 1], [2, 1]],
+        [[0, 2], [1, 2], [2, 2]],
+        [[0, 0], [1, 1], [2, 2]],
+        [[0, 2], [1, 1], [2, 0]],
+    ];
+
+    return winningCombinations.some(combination =>
+        combination.every(([r, c]) => ticTacToeBoard[r][c] === currentPlayer)
+    );
 }
 
 function startRockPaperScissors() {
     addMessageToChat('bot', "Let's play Rock-Paper-Scissors! Type rock, paper, or scissors.");
-    document.getElementById('send-btn').addEventListener('click', function playGame() {
+
+    document.getElementById('send-btn').addEventListener('click', function playGameOnce() {
         const userChoice = document.getElementById('user-input').value.trim().toLowerCase();
         const choices = ['rock', 'paper', 'scissors'];
         const botChoice = choices[Math.floor(Math.random() * choices.length)];
@@ -105,5 +133,8 @@ function startRockPaperScissors() {
         }
 
         addMessageToChat('bot', result);
+
+        // Remove this event listener after the game ends
+        document.getElementById('send-btn').removeEventListener('click', playGameOnce);
     }, { once: true });
 }
