@@ -54,9 +54,32 @@ function processBotResponse(userInput) {
 }
 
 function startTicTacToe() {
-    addMessageToChat('bot', "Starting Tic-Tac-Toe! Please open the game window.");
-    // Launch Tic-Tac-Toe in a new tab or alert for now
-    window.open('https://playtictactoe.org/', '_blank'); // Placeholder link
+    addMessageToChat('bot', "Starting Tic-Tac-Toe! Here's the board:");
+    const ticTacToeHTML = `
+        <div id="tic-tac-toe">
+            <div class="row">
+                <button class="cell" onclick="makeMove(this, 0, 0)"></button>
+                <button class="cell" onclick="makeMove(this, 0, 1)"></button>
+                <button class="cell" onclick="makeMove(this, 0, 2)"></button>
+            </div>
+            <div class="row">
+                <button class="cell" onclick="makeMove(this, 1, 0)"></button>
+                <button class="cell" onclick="makeMove(this, 1, 1)"></button>
+                <button class="cell" onclick="makeMove(this, 1, 2)"></button>
+            </div>
+            <div class="row">
+                <button class="cell" onclick="makeMove(this, 2, 0)"></button>
+                <button class="cell" onclick="makeMove(this, 2, 1)"></button>
+                <button class="cell" onclick="makeMove(this, 2, 2)"></button>
+            </div>
+        </div>`;
+    document.getElementById('chat-box').innerHTML += ticTacToeHTML;
+}
+
+function makeMove(cell, row, col) {
+    cell.textContent = 'X'; // For now, only player plays.
+    cell.disabled = true;
+    // Add logic for the bot's turn or game status check.
 }
 
 function startRockPaperScissors() {
@@ -68,7 +91,7 @@ function startRockPaperScissors() {
 
         let result;
         if (userChoice === botChoice) {
-            result = "It's a tie!";
+            result = `It's a tie! We both chose ${botChoice}.`;
         } else if (
             (userChoice === 'rock' && botChoice === 'scissors') ||
             (userChoice === 'paper' && botChoice === 'rock') ||
@@ -82,5 +105,5 @@ function startRockPaperScissors() {
         }
 
         addMessageToChat('bot', result);
-    });
+    }, { once: true });
 }
